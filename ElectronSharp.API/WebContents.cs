@@ -1,7 +1,4 @@
 ﻿using ElectronSharp.API.Entities;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 
@@ -30,26 +27,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<bool> OnRenderProcessGone
         {
-            add
-            {
-                if (_renderProcessGone == null)
-                {
-                    BridgeConnector.On<bool>("webContents-render-process-gone" + Id, (killed) =>
-                    {
-                        _renderProcessGone(killed);
-                    });
-
-                    BridgeConnector.Emit("register-webContents-render-process-gone", Id);
-                }
-                _renderProcessGone += value;
-            }
-            remove
-            {
-                _renderProcessGone -= value;
-
-                if (_renderProcessGone == null)
-                    BridgeConnector.Off("webContents-render-process-gone" + Id);
-            }
+            add => ElectronEventManager.AddEvent("webContents-render-process-gone", Id, _renderProcessGone, value);
+            remove => ElectronEventManager.RemoveEvent("webContents-render-process-gone", Id, _renderProcessGone, value);
         }
 
         private event Action<bool> _renderProcessGone;
@@ -60,26 +39,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnDidFinishLoad
         {
-            add
-            {
-                if (_didFinishLoad == null)
-                {
-                    BridgeConnector.On("webContents-didFinishLoad" + Id, () =>
-                    {
-                        _didFinishLoad();
-                    });
-
-                    BridgeConnector.Emit("register-webContents-didFinishLoad", Id);
-                }
-                _didFinishLoad += value;
-            }
-            remove
-            {
-                _didFinishLoad -= value;
-
-                if (_didFinishLoad == null)
-                    BridgeConnector.Off("webContents-didFinishLoad" + Id);
-            }
+            add => ElectronEventManager.AddEvent("webContents-didFinishLoad", Id, _didFinishLoad, value);
+            remove => ElectronEventManager.RemoveEvent("webContents-didFinishLoad", Id, _didFinishLoad, value);
         }
 
         private event Action _didFinishLoad;

@@ -16,26 +16,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnLockScreen
         {
-            add
-            {
-                if (_lockScreen == null)
-                {
-                    BridgeConnector.On("pm-lock-screen", () =>
-                    {
-                        _lockScreen();
-                    });
-
-                    BridgeConnector.Emit("register-pm-lock-screen");
-                }
-                _lockScreen += value;
-            }
-            remove
-            {
-                _lockScreen -= value;
-
-                if (_lockScreen == null)
-                    BridgeConnector.Off("pm-lock-screen");
-            }
+            add => ElectronEventManager.AddEvent("pm-lock-screen", string.Empty, _lockScreen, value);
+            remove => ElectronEventManager.RemoveEvent("pm-lock-screen", string.Empty, _lockScreen, value);
         }
 
         private event Action _lockScreen;
@@ -47,26 +29,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnUnLockScreen
         {
-            add
-            {
-                if (_unlockScreen == null)
-                {
-                    BridgeConnector.On("pm-unlock-screen", () =>
-                    {
-                        _unlockScreen();
-                    });
-
-                    BridgeConnector.Emit("register-pm-unlock-screen");
-                }
-                _unlockScreen += value;
-            }
-            remove
-            {
-                _unlockScreen -= value;
-
-                if (_unlockScreen == null)
-                    BridgeConnector.Off("pm-unlock-screen");
-            }
+            add => ElectronEventManager.AddEvent("pm-unlock-screen", string.Empty, _unlockScreen, value);
+            remove => ElectronEventManager.RemoveEvent("pm-unlock-screen", string.Empty, _unlockScreen, value);
         }
 
         private event Action _unlockScreen;
@@ -78,26 +42,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnSuspend
         {
-            add
-            {
-                if (_suspend == null)
-                {
-                    BridgeConnector.On("pm-suspend", () =>
-                    {
-                        _suspend();
-                    });
-
-                    BridgeConnector.Emit("register-pm-suspend");
-                }
-                _suspend += value;
-            }
-            remove
-            {
-                _suspend -= value;
-
-                if (_suspend == null)
-                    BridgeConnector.Off("pm-suspend");
-            }
+            add => ElectronEventManager.AddEvent("pm-suspend", string.Empty, _suspend, value);
+            remove => ElectronEventManager.RemoveEvent("pm-suspend", string.Empty, _suspend, value);
         }
 
         private event Action _suspend;
@@ -109,26 +55,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnResume
         {
-            add
-            {
-                if (_resume == null)
-                {
-                    BridgeConnector.On("pm-resume", () =>
-                    {
-                        _resume();
-                    });
-
-                    BridgeConnector.Emit("register-pm-resume");
-                }
-                _resume += value;
-            }
-            remove
-            {
-                _resume -= value;
-
-                if (_resume == null)
-                    BridgeConnector.Off("pm-resume");
-            }
+            add => ElectronEventManager.AddEvent("pm-resume", string.Empty, _resume, value);
+            remove => ElectronEventManager.RemoveEvent("pm-resume", string.Empty, _resume, value);
         }
 
         private event Action _resume;
@@ -140,26 +68,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnAC
         {
-            add
-            {
-                if (_onAC == null)
-                {
-                    BridgeConnector.On("pm-on-ac", () =>
-                    {
-                        _onAC();
-                    });
-
-                    BridgeConnector.Emit("register-pm-on-ac");
-                }
-                _onAC += value;
-            }
-            remove
-            {
-                _onAC -= value;
-
-                if (_onAC == null)
-                    BridgeConnector.Off("pm-on-ac");
-            }
+            add => ElectronEventManager.AddEvent("pm-on-ac", string.Empty, _onAC, value);
+            remove => ElectronEventManager.RemoveEvent("pm-on-ac", string.Empty, _onAC, value);
         }
 
         private event Action _onAC;
@@ -171,26 +81,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnBattery
         {
-            add
-            {
-                if (_onBattery == null)
-                {
-                    BridgeConnector.On("pm-on-battery", () =>
-                    {
-                        _onBattery();
-                    });
-
-                    BridgeConnector.Emit("register-pm-on-battery");
-                }
-                _onBattery += value;
-            }
-            remove
-            {
-                _onBattery -= value;
-
-                if (_onBattery == null)
-                    BridgeConnector.Off("pm-on-battery");
-            }
+            add => ElectronEventManager.AddEvent("pm-on-battery", string.Empty, _onBattery, value);
+            remove => ElectronEventManager.RemoveEvent("pm-on-battery", string.Empty, _onBattery, value);
         }
 
         private event Action _onBattery;
@@ -206,26 +98,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnShutdown
         {
-            add
-            {
-                if (_shutdown == null)
-                {
-                    BridgeConnector.On("pm-shutdown", () =>
-                    {
-                        _shutdown();
-                    });
-
-                    BridgeConnector.Emit("register-pm-shutdown");
-                }
-                _shutdown += value;
-            }
-            remove
-            {
-                _shutdown -= value;
-
-                if (_shutdown == null)
-                    BridgeConnector.Off("pm-on-shutdown");
-            }
+            add => ElectronEventManager.AddEvent("pm-shutdown", string.Empty, _shutdown, value);
+            remove => ElectronEventManager.RemoveEvent("pm-shutdown", string.Empty, _shutdown, value);
         }
 
         private event Action _shutdown;

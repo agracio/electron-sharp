@@ -22,26 +22,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<TrayClickEventArgs, Rectangle> OnClick
         {
-            add
-            {
-                if (_click == null)
-                {
-                    BridgeConnector.On<TrayClickEventResponse>("tray-click-event" + GetHashCode(), (result) =>
-                    {
-                        _click(result.eventArgs, result.bounds);
-                    });
-
-                    BridgeConnector.Emit("register-tray-click", GetHashCode());
-                }
-                _click += value;
-            }
-            remove
-            {
-                _click -= value;
-
-                if (_click == null)
-                    BridgeConnector.Off("tray-click-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddTrayEvent("tray-click-event", GetHashCode(), _click, value);
+            remove => ElectronEventManager.RemoveTrayEvent("tray-click-event", GetHashCode(), _click, value);
         }
 
         private event Action<TrayClickEventArgs, Rectangle> _click;
@@ -53,26 +35,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action<TrayClickEventArgs, Rectangle> OnRightClick
         {
-            add
-            {
-                if (_rightClick == null)
-                {
-                    BridgeConnector.On<TrayClickEventResponse>("tray-right-click-event" + GetHashCode(), (result) =>
-                    {
-                        _rightClick(result.eventArgs, result.bounds);
-                    });
-
-                    BridgeConnector.Emit("register-tray-right-click", GetHashCode());
-                }
-                _rightClick += value;
-            }
-            remove
-            {
-                _rightClick -= value;
-
-                if (_rightClick == null)
-                    BridgeConnector.Off("tray-right-click-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddTrayEvent("tray-right-click-event", GetHashCode(), _rightClick, value);
+            remove => ElectronEventManager.RemoveTrayEvent("tray-right-click-event", GetHashCode(), _rightClick, value);
         }
 
         private event Action<TrayClickEventArgs, Rectangle> _rightClick;
@@ -84,26 +48,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action<TrayClickEventArgs, Rectangle> OnDoubleClick
         {
-            add
-            {
-                if (_doubleClick == null)
-                {
-                    BridgeConnector.On<TrayClickEventResponse>("tray-double-click-event" + GetHashCode(), (result) =>
-                    {
-                        _doubleClick(result.eventArgs, result.bounds);
-                    });
-
-                    BridgeConnector.Emit("register-tray-double-click", GetHashCode());
-                }
-                _doubleClick += value;
-            }
-            remove
-            {
-                _doubleClick -= value;
-
-                if (_doubleClick == null)
-                    BridgeConnector.Off("tray-double-click-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddTrayEvent("tray-double-click-event", GetHashCode(), _doubleClick, value);
+            remove => ElectronEventManager.RemoveTrayEvent("tray-double-click-event", GetHashCode(), _doubleClick, value);
         }
 
         private event Action<TrayClickEventArgs, Rectangle> _doubleClick;
@@ -114,26 +60,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnBalloonShow
         {
-            add
-            {
-                if (_balloonShow == null)
-                {
-                    BridgeConnector.On("tray-balloon-show-event" + GetHashCode(), () =>
-                    {
-                        _balloonShow();
-                    });
-
-                    BridgeConnector.Emit("register-tray-balloon-show", GetHashCode());
-                }
-                _balloonShow += value;
-            }
-            remove
-            {
-                _balloonShow -= value;
-
-                if (_balloonShow == null)
-                    BridgeConnector.Off("tray-balloon-show-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventNoSuffix("tray-balloon-show-event", GetHashCode(), _balloonShow, value);
+            remove => ElectronEventManager.RemoveEvent("tray-balloon-show-event", GetHashCode(), _balloonShow, value);
         }
 
         private event Action _balloonShow;
@@ -144,26 +72,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnBalloonClick
         {
-            add
-            {
-                if (_balloonClick == null)
-                {
-                    BridgeConnector.On("tray-balloon-click-event" + GetHashCode(), () =>
-                    {
-                        _balloonClick();
-                    });
-
-                    BridgeConnector.Emit("register-tray-balloon-click", GetHashCode());
-                }
-                _balloonClick += value;
-            }
-            remove
-            {
-                _balloonClick -= value;
-
-                if (_balloonClick == null)
-                    BridgeConnector.Off("tray-balloon-click-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventNoSuffix("tray-balloon-click-event", GetHashCode(), _balloonClick, value);
+            remove => ElectronEventManager.RemoveEvent("tray-balloon-click-event", GetHashCode(), _balloonClick, value);
         }
 
         private event Action _balloonClick;
@@ -175,26 +85,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnBalloonClosed
         {
-            add
-            {
-                if (_balloonClosed == null)
-                {
-                    BridgeConnector.On("tray-balloon-closed-event" + GetHashCode(), () =>
-                    {
-                        _balloonClosed();
-                    });
-
-                    BridgeConnector.Emit("register-tray-balloon-closed", GetHashCode());
-                }
-                _balloonClosed += value;
-            }
-            remove
-            {
-                _balloonClosed -= value;
-
-                if (_balloonClosed == null)
-                    BridgeConnector.Off("tray-balloon-closed-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventNoSuffix("tray-balloon-closed-event", GetHashCode(), _balloonClosed, value);
+            remove => ElectronEventManager.RemoveEvent("tray-balloon-closed-event", GetHashCode(), _balloonClosed, value);
         }
 
         private event Action _balloonClosed;

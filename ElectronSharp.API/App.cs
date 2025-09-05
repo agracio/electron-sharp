@@ -83,26 +83,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<string[]> ActivateFromSecondInstance
         {
-            add
-            {
-                if (_appActivateFromSecondInstance == null)
-                {
-                    BridgeConnector.On<string[]>("app-activate-from-second-instance", (args) =>
-                    {
-                        _appActivateFromSecondInstance(args);
-                    });
-                }
-                _appActivateFromSecondInstance += value;
-            }
-            remove
-            {
-                _appActivateFromSecondInstance -= value;
-
-                if (_appActivateFromSecondInstance == null)
-                {
-                    BridgeConnector.Off("app-activate-from-second-instance");
-                }
-            }
+            add => ElectronEventManager.AddEventNoEmit("app-activate-from-second-instance", string.Empty, _appActivateFromSecondInstance, value);
+            remove => ElectronEventManager.RemoveEvent("app-activate-from-second-instance", string.Empty, _appActivateFromSecondInstance, value);
         }
 
         private event Action<string[]> _appActivateFromSecondInstance;
@@ -119,29 +101,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action WindowAllClosed
         {
-            add
-            {
-                if (_windowAllClosed == null)
-                {
-                    BridgeConnector.On("app-window-all-closed" + GetHashCode(), () =>
-                    {
-                        if (!Electron.WindowManager.IsQuitOnWindowAllClosed || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                        {
-                            _windowAllClosed();
-                        }
-                    });
-
-                    BridgeConnector.Emit("register-app-window-all-closed-event", GetHashCode());
-                }
-                _windowAllClosed += value;
-            }
-            remove
-            {
-                _windowAllClosed -= value;
-
-                if (_windowAllClosed == null)
-                    BridgeConnector.Off("app-window-all-closed" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-window-all-closed", GetHashCode(), _windowAllClosed, value);
+            remove => ElectronEventManager.RemoveEvent("app-window-all-closed", GetHashCode(), _windowAllClosed, value);
         }
 
         private event Action _windowAllClosed;
@@ -309,26 +270,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action BrowserWindowBlur
         {
-            add
-            {
-                if (_browserWindowBlur == null)
-                {
-                    BridgeConnector.On("app-browser-window-blur" + GetHashCode(), () =>
-                    {
-                        _browserWindowBlur();
-                    });
-
-                    BridgeConnector.Emit("register-app-browser-window-blur-event", GetHashCode());
-                }
-                _browserWindowBlur += value;
-            }
-            remove
-            {
-                _browserWindowBlur -= value;
-
-                if (_browserWindowBlur == null)
-                    BridgeConnector.Off("app-browser-window-blur" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-browser-window-blur", GetHashCode(), _browserWindowBlur, value);
+            remove => ElectronEventManager.RemoveEvent("app-browser-window-blur", GetHashCode(), _browserWindowBlur, value);
         }
 
         private event Action _browserWindowBlur;
@@ -338,26 +281,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action BrowserWindowFocus
         {
-            add
-            {
-                if (_browserWindowFocus == null)
-                {
-                    BridgeConnector.On("app-browser-window-focus" + GetHashCode(), () =>
-                    {
-                        _browserWindowFocus();
-                    });
-
-                    BridgeConnector.Emit("register-app-browser-window-focus-event", GetHashCode());
-                }
-                _browserWindowFocus += value;
-            }
-            remove
-            {
-                _browserWindowFocus -= value;
-
-                if (_browserWindowFocus == null)
-                    BridgeConnector.Off("app-browser-window-focus" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-browser-window-focus", GetHashCode(), _browserWindowFocus, value);
+            remove => ElectronEventManager.RemoveEvent("app-browser-window-focus", GetHashCode(), _browserWindowFocus, value);
         }
 
         private event Action _browserWindowFocus;
@@ -367,26 +292,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action BrowserWindowCreated
         {
-            add
-            {
-                if (_browserWindowCreated == null)
-                {
-                    BridgeConnector.On("app-browser-window-created" + GetHashCode(), () =>
-                    {
-                        _browserWindowCreated();
-                    });
-
-                    BridgeConnector.Emit("register-app-browser-window-created-event", GetHashCode());
-                }
-                _browserWindowCreated += value;
-            }
-            remove
-            {
-                _browserWindowCreated -= value;
-
-                if (_browserWindowCreated == null)
-                    BridgeConnector.Off("app-browser-window-created" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-browser-window-created", GetHashCode(), _browserWindowCreated, value);
+            remove => ElectronEventManager.RemoveEvent("app-browser-window-created", GetHashCode(), _browserWindowCreated, value);
         }
 
         private event Action _browserWindowCreated;
@@ -396,26 +303,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action WebContentsCreated
         {
-            add
-            {
-                if (_webContentsCreated == null)
-                {
-                    BridgeConnector.On("app-web-contents-created" + GetHashCode(), () =>
-                    {
-                        _webContentsCreated();
-                    });
-
-                    BridgeConnector.Emit("register-app-web-contents-created-event", GetHashCode());
-                }
-                _webContentsCreated += value;
-            }
-            remove
-            {
-                _webContentsCreated -= value;
-
-                if (_webContentsCreated == null)
-                    BridgeConnector.Off("app-web-contents-created" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-web-contents-created", GetHashCode(), _webContentsCreated, value);
+            remove => ElectronEventManager.RemoveEvent("app-web-contents-created", GetHashCode(), _webContentsCreated, value);
         }
 
         private event Action _webContentsCreated;
@@ -429,26 +318,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action<bool> AccessibilitySupportChanged
         {
-            add
-            {
-                if (_accessibilitySupportChanged == null)
-                {
-                    BridgeConnector.On<bool>("app-accessibility-support-changed" + GetHashCode(), (state) =>
-                    {
-                        _accessibilitySupportChanged(state);
-                    });
-
-                    BridgeConnector.Emit("register-app-accessibility-support-changed-event", GetHashCode());
-                }
-                _accessibilitySupportChanged += value;
-            }
-            remove
-            {
-                _accessibilitySupportChanged -= value;
-
-                if (_accessibilitySupportChanged == null)
-                    BridgeConnector.Off("app-accessibility-support-changed" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-accessibility-support-changed", GetHashCode(), _accessibilitySupportChanged, value);
+            remove => ElectronEventManager.RemoveEvent("app-accessibility-support-changed", GetHashCode(), _accessibilitySupportChanged, value);
         }
 
         private event Action<bool> _accessibilitySupportChanged;
@@ -504,26 +375,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action<string> OpenFile
         {
-            add
-            {
-                if (_openFile == null)
-                {
-                    BridgeConnector.On<string>("app-open-file" + GetHashCode(), (file) =>
-                    {
-                        _openFile(file);
-                    });
-
-                    BridgeConnector.Emit("register-app-open-file-event", GetHashCode());
-                }
-                _openFile += value;
-            }
-            remove
-            {
-                _openFile -= value;
-
-                if (_openFile == null)
-                    BridgeConnector.Off("app-open-file" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-open-file", GetHashCode(), _openFile, value);
+            remove => ElectronEventManager.RemoveEvent("app-open-file", GetHashCode(), _openFile, value);
         }
 
         private event Action<string> _openFile;
@@ -534,26 +387,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<string> OpenUrl
         {
-            add
-            {
-                if (_openUrl == null)
-                {
-                    BridgeConnector.On<string>("app-open-url" + GetHashCode(), (url) =>
-                    {
-                        _openUrl(url);
-                    });
-
-                    BridgeConnector.Emit("register-app-open-url-event", GetHashCode());
-                }
-                _openUrl += value;
-            }
-            remove
-            {
-                _openUrl -= value;
-
-                if (_openUrl == null)
-                    BridgeConnector.Off("app-open-url" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("app-open-url", GetHashCode(), _openUrl, value);
+            remove => ElectronEventManager.RemoveEvent("app-open-url", GetHashCode(), _openUrl, value);
         }
 
         private event Action<string> _openUrl;

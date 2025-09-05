@@ -1,7 +1,4 @@
 ﻿using ElectronSharp.API.Entities;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 
@@ -17,26 +14,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<Display> OnDisplayAdded
         {
-            add
-            {
-                if (_onDisplayAdded == null)
-                {
-                    BridgeConnector.On<Display>("screen-display-added-event" + GetHashCode(), (display) =>
-                    {
-                        _onDisplayAdded(display);
-                    });
-
-                    BridgeConnector.Emit("register-screen-display-added", GetHashCode());
-                }
-                _onDisplayAdded += value;
-            }
-            remove
-            {
-                _onDisplayAdded -= value;
-
-                if (_onDisplayAdded == null)
-                    BridgeConnector.Off("screen-display-added-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventNoSuffix("screen-display-added-event", GetHashCode(), _onDisplayAdded, value);
+            remove => ElectronEventManager.RemoveEvent("screen-display-added-event", GetHashCode(), _onDisplayAdded, value);
         }
 
         private event Action<Display> _onDisplayAdded;
@@ -46,26 +25,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<Display> OnDisplayRemoved
         {
-            add
-            {
-                if (_onDisplayRemoved == null)
-                {
-                    BridgeConnector.On<Display>("screen-display-removed-event" + GetHashCode(), (display) =>
-                    {
-                        _onDisplayRemoved(display);
-                    });
-
-                    BridgeConnector.Emit("register-screen-display-removed", GetHashCode());
-                }
-                _onDisplayRemoved += value;
-            }
-            remove
-            {
-                _onDisplayRemoved -= value;
-
-                if (_onDisplayRemoved == null)
-                    BridgeConnector.Off("screen-display-removed-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventNoSuffix("screen-display-removed-event", GetHashCode(), _onDisplayRemoved, value);
+            remove => ElectronEventManager.RemoveEvent("screen-display-removed-event", GetHashCode(), _onDisplayRemoved, value);
         }
 
         private event Action<Display> _onDisplayRemoved;
@@ -77,26 +38,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<Display, string[]> OnDisplayMetricsChanged
         {
-            add
-            {
-                if (_onDisplayMetricsChanged == null)
-                {
-                    BridgeConnector.On<DisplayChanged>("screen-display-metrics-changed-event" + GetHashCode(), (args) =>
-                    {
-                        _onDisplayMetricsChanged(args.display, args.metrics);
-                    });
-
-                    BridgeConnector.Emit("register-screen-display-metrics-changed", GetHashCode());
-                }
-                _onDisplayMetricsChanged += value;
-            }
-            remove
-            {
-                _onDisplayMetricsChanged -= value;
-
-                if (_onDisplayMetricsChanged == null)
-                    BridgeConnector.Off("screen-display-metrics-changed-event" + GetHashCode());
-            }
+            add => ElectronEventManager.AddScreenEvent("screen-display-metrics-changed-event", GetHashCode(), _onDisplayMetricsChanged, value);
+            remove => ElectronEventManager.RemoveScreenEvent("screen-display-metrics-changed-event", GetHashCode(), _onDisplayMetricsChanged, value);
         }
 
         private event Action<Display, string[]> _onDisplayMetricsChanged;

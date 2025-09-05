@@ -1,7 +1,5 @@
 ﻿using ElectronSharp.API.Entities;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -142,26 +140,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<string> OnError
         {
-            add
-            {
-                if (_error == null)
-                {
-                    BridgeConnector.On<string>("autoUpdater-error" + GetHashCode(), (message) =>
-                    {
-                        _error(message);
-                    });
-
-                    BridgeConnector.Emit("register-autoUpdater-error-event", GetHashCode());
-                }
-                _error += value;
-            }
-            remove
-            {
-                _error -= value;
-
-                if (_error == null)
-                    BridgeConnector.Off("autoUpdater-error" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("autoUpdater-error", GetHashCode(), _error, value);
+            remove => ElectronEventManager.RemoveEvent("autoUpdater-error", GetHashCode(), _error, value);
         }
 
         private event Action<string> _error;
@@ -171,26 +151,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnCheckingForUpdate
         {
-            add
-            {
-                if (_checkingForUpdate == null)
-                {
-                    BridgeConnector.On("autoUpdater-checking-for-update" + GetHashCode(), () =>
-                    {
-                        _checkingForUpdate();
-                    });
-
-                    BridgeConnector.Emit("register-autoUpdater-checking-for-update-event", GetHashCode());
-                }
-                _checkingForUpdate += value;
-            }
-            remove
-            {
-                _checkingForUpdate -= value;
-
-                if (_checkingForUpdate == null)
-                    BridgeConnector.Off("autoUpdater-checking-for-update" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("autoUpdater-checking-for-update", GetHashCode(), _checkingForUpdate, value);
+            remove => ElectronEventManager.RemoveEvent("autoUpdater-checking-for-update", GetHashCode(), _checkingForUpdate, value);
         }
 
         private event Action _checkingForUpdate;
@@ -201,26 +163,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<UpdateInfo> OnUpdateAvailable
         {
-            add
-            {
-                if (_updateAvailable == null)
-                {
-                    BridgeConnector.On<UpdateInfo>("autoUpdater-update-available" + GetHashCode(), (updateInfo) =>
-                    {
-                        _updateAvailable(updateInfo);
-                    });
-
-                    BridgeConnector.Emit("register-autoUpdater-update-available-event", GetHashCode());
-                }
-                _updateAvailable += value;
-            }
-            remove
-            {
-                _updateAvailable -= value;
-
-                if (_updateAvailable == null)
-                    BridgeConnector.Off("autoUpdater-update-available" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("autoUpdater-update-available", GetHashCode(), _updateAvailable, value);
+            remove => ElectronEventManager.RemoveEvent("autoUpdater-update-available", GetHashCode(), _updateAvailable, value);
         }
 
         private event Action<UpdateInfo> _updateAvailable;
@@ -230,26 +174,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<UpdateInfo> OnUpdateNotAvailable
         {
-            add
-            {
-                if (_updateNotAvailable == null)
-                {
-                    BridgeConnector.On<UpdateInfo>("autoUpdater-update-not-available" + GetHashCode(), (updateInfo) =>
-                    {
-                        _updateNotAvailable(updateInfo);
-                    });
-
-                    BridgeConnector.Emit("register-autoUpdater-update-not-available-event", GetHashCode());
-                }
-                _updateNotAvailable += value;
-            }
-            remove
-            {
-                _updateNotAvailable -= value;
-
-                if (_updateNotAvailable == null)
-                    BridgeConnector.Off("autoUpdater-update-not-available" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("autoUpdater-update-not-available", GetHashCode(), _updateNotAvailable, value);
+            remove => ElectronEventManager.RemoveEvent("autoUpdater-update-not-available", GetHashCode(), _updateNotAvailable, value);
         }
 
         private event Action<UpdateInfo> _updateNotAvailable;
@@ -259,26 +185,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<ProgressInfo> OnDownloadProgress
         {
-            add
-            {
-                if (_downloadProgress == null)
-                {
-                    BridgeConnector.On<ProgressInfo>("autoUpdater-download-progress" + GetHashCode(), (progressInfo) =>
-                    {
-                        _downloadProgress(progressInfo);
-                    });
-
-                    BridgeConnector.Emit("register-autoUpdater-download-progress-event", GetHashCode());
-                }
-                _downloadProgress += value;
-            }
-            remove
-            {
-                _downloadProgress -= value;
-
-                if (_downloadProgress == null)
-                    BridgeConnector.Off("autoUpdater-download-progress" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("autoUpdater-download-progress", GetHashCode(), _downloadProgress, value);
+            remove => ElectronEventManager.RemoveEvent("autoUpdater-download-progress", GetHashCode(), _downloadProgress, value);
         }
 
         private event Action<ProgressInfo> _downloadProgress;
@@ -288,26 +196,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<UpdateInfo> OnUpdateDownloaded
         {
-            add
-            {
-                if (_updateDownloaded == null)
-                {
-                    BridgeConnector.On<UpdateInfo>("autoUpdater-update-downloaded" + GetHashCode(), (updateInfo) =>
-                    {
-                        _updateDownloaded(updateInfo);
-                    });
-
-                    BridgeConnector.Emit("register-autoUpdater-update-downloaded-event", GetHashCode());
-                }
-                _updateDownloaded += value;
-            }
-            remove
-            {
-                _updateDownloaded -= value;
-
-                if (_updateDownloaded == null)
-                    BridgeConnector.Off("autoUpdater-update-downloaded" + GetHashCode());
-            }
+            add => ElectronEventManager.AddEventWithSuffix("autoUpdater-update-downloaded", GetHashCode(), _updateDownloaded, value);
+            remove => ElectronEventManager.RemoveEvent("autoUpdater-update-downloaded", GetHashCode(), _updateDownloaded, value);
         }
 
         private event Action<UpdateInfo> _updateDownloaded;

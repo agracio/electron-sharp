@@ -133,28 +133,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action Updated
         {
-            add
-            {
-                if (_updated == null)
-                {
-                    BridgeConnector.On("nativeTheme-updated" + GetHashCode(), () =>
-                    {
-                        _updated();
-                    });
-
-                    BridgeConnector.Emit("register-nativeTheme-updated-event", GetHashCode());
-                }
-                _updated += value;
-            }
-            remove
-            {
-                _updated -= value;
-
-                if (_updated == null)
-                {
-                    BridgeConnector.Off("nativeTheme-updated" + GetHashCode());
-                }
-            }
+            add => ElectronEventManager.AddEventWithSuffix("nativeTheme-updated", GetHashCode(), _updated, value);
+            remove => ElectronEventManager.RemoveEvent("nativeTheme-updated", GetHashCode(), _updated, value);
         }
 
         private event Action _updated;

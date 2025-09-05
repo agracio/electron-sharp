@@ -7,66 +7,101 @@ namespace ElectronSharp.API;
 
 internal static class ElectronEventManager
 {
-    internal static void AddEvent(string eventName, object id, Action callback, Action value)
+    internal static void AddEvent(string eventName, object id, Action callback, Action value, string suffix = "", bool emit = true, bool noSuffix = false)
     {
         if (callback == null)
         {
+            var emitEventName = noSuffix ? $"register-{eventName.Replace("-event", string.Empty)}" : $"register-{eventName}{suffix}";
             BridgeConnector.On(eventName + id, () => { callback(); });
-            BridgeConnector.Emit($"register-{eventName}", id);
+            if (emit) BridgeConnector.Emit(emitEventName, id);
             callback += value;
         }
     }
-
+    
+    internal static void AddEventWithSuffix(string eventName, object id, Action callback, Action value)
+    {
+        AddEvent(eventName, id, callback, value, "-event");
+    }
+    
+    internal static void AddEventNoSuffix(string eventName, object id, Action callback, Action value)
+    {
+        AddEvent(eventName, id, callback, value, noSuffix: true);
+    }
+    
+    internal static void AddEventNoEmit(string eventName, object id, Action callback, Action value)
+    {
+        AddEvent(eventName, id, callback, value, emit: false);
+    }
+    
     internal static void RemoveEvent(string eventName, object id, Action callback, Action value)
     {
         callback -= value;
 
-        if (callback == null)
-        {
-            BridgeConnector.Off(eventName + id);
-        }
+        if (callback == null) BridgeConnector.Off(eventName + id);
     }
     
-    internal static void AddEvent<T>(string eventName, object id, Action<T> callback, Action<T> value)
+    internal static void AddEvent<T>(string eventName, object id, Action<T> callback, Action<T> value, string suffix = "", bool emit = true, bool noSuffix = false)
     {
         if (callback == null)
         {
-            BridgeConnector.On<T>(eventName + id, (args) =>
-            {
-                callback(args);
-            });
-            BridgeConnector.Emit($"register-{eventName}", id);
+            var emitEventName = noSuffix ? $"register-{eventName.Replace("-event", string.Empty)}" : $"register-{eventName}{suffix}";
+            BridgeConnector.On<T>(eventName + id, (args) => { callback(args); });
+            if (emit) BridgeConnector.Emit(emitEventName, id);
             callback += value;
         }
+    }
+    
+    internal static void AddEventWithSuffix<T>(string eventName, object id, Action<T> callback, Action<T> value)
+    {
+        AddEvent(eventName, id, callback, value, "-event");
+    }
+    
+    internal static void AddEventNoSuffix<T>(string eventName, object id, Action<T> callback, Action<T> value)
+    {
+        AddEvent(eventName, id, callback, value, noSuffix: true);
+    }
+
+    internal static void AddEventNoEmit<T>(string eventName, object id, Action<T> callback, Action<T> value)
+    {
+        AddEvent(eventName, id, callback, value, emit: false);
     }
     
     internal static void RemoveEvent<T>(string eventName, object id, Action<T> callback, Action<T> value)
     {
         callback -= value;
-        if (callback == null)
-            BridgeConnector.Off(eventName + id);
+        if (callback == null) BridgeConnector.Off(eventName + id);
     }
 
-    internal static void AddTrayEvent<TEventArgs, TEntity>(string eventName, object id, Action<TrayClickEventArgs, Rectangle> callback, Action<TrayClickEventArgs, Rectangle> value)
-        where TEventArgs : TrayClickEventArgs 
-        where TEntity : Rectangle
+    internal static void AddTrayEvent(string eventName, object id, Action<TrayClickEventArgs, Rectangle> callback, Action<TrayClickEventArgs, Rectangle> value)
     {
         if (callback == null)
         {
-            BridgeConnector.On<TrayClickEventResponse>(eventName + id, (result) =>
-            {
-                callback(result.eventArgs, result.bounds);
-            });
-            BridgeConnector.Emit($"register-{eventName}", id);
+            BridgeConnector.On<TrayClickEventResponse>(eventName + id, (result) => { callback(result.eventArgs, result.bounds); });
+            BridgeConnector.Emit($"register-{eventName.Replace("-event", string.Empty)}", id);
             callback += value;
         }
     }
     
-    internal static void RemoveTrayEvent<TEventArgs, TEntity>(string eventName, object id, Action<TrayClickEventArgs, Rectangle> callback, Action<TrayClickEventArgs, Rectangle> value) where TEventArgs : TrayClickEventArgs where TEntity : Rectangle
+    internal static void RemoveTrayEvent(string eventName, object id, Action<TrayClickEventArgs, Rectangle> callback, Action<TrayClickEventArgs, Rectangle> value)
     {
         callback -= value;
+        if (callback == null) BridgeConnector.Off(eventName + id);
+    }
+
+    internal static void AddScreenEvent(string eventName, object id, Action<Display, string[]> callback, Action<Display, string[]> value)
+    {
         if (callback == null)
-            BridgeConnector.Off(eventName + id);
+        {
+            BridgeConnector.On<DisplayChanged>(eventName + id, (args) => { callback(args.display, args.metrics); });
+            BridgeConnector.Emit($"register-{eventName.Replace("-event", string.Empty)}", id);
+            callback += value;
+        }
+    }
+    
+    internal static void RemoveScreenEvent(string eventName, object id, Action<Display, string[]> callback, Action<Display, string[]> value)
+    {
+        callback -= value;
+        if (callback == null) BridgeConnector.Off(eventName + id);
     }
 
 }
