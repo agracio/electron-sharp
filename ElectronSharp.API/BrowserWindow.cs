@@ -6,7 +6,6 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Threading.Tasks;
 
@@ -23,7 +22,7 @@ namespace ElectronSharp.API
         /// <value>
         /// The identifier.
         /// </value>
-        public int Id { get; private set; }
+        public int Id { get; }
 
         /// <summary>
         /// Emitted when the web page has been rendered (while not being shown) and 
@@ -31,26 +30,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnReadyToShow
         {
-            add
-            {
-                if (_readyToShow == null)
-                {
-                    BridgeConnector.On("browserWindow-ready-to-show" + Id, () =>
-                    {
-                        _readyToShow();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-ready-to-show", Id);
-                }
-                _readyToShow += value;
-            }
-            remove
-            {
-                _readyToShow -= value;
-
-                if (_readyToShow == null)
-                    BridgeConnector.Off("browserWindow-ready-to-show" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-ready-to-show", Id, _readyToShow, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-ready-to-show", Id, _readyToShow, value);
         }
 
         private event Action _readyToShow;
@@ -60,26 +41,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<string> OnPageTitleUpdated
         {
-            add
-            {
-                if (_pageTitleUpdated == null)
-                {
-                    BridgeConnector.On<string>("browserWindow-page-title-updated" + Id, (title) =>
-                    {
-                        _pageTitleUpdated(title);
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-page-title-updated", Id);
-                }
-                _pageTitleUpdated += value;
-            }
-            remove
-            {
-                _pageTitleUpdated -= value;
-
-                if (_pageTitleUpdated == null)
-                    BridgeConnector.Off("browserWindow-page-title-updated" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-page-title-updated", Id, _pageTitleUpdated, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-page-title-updated", Id, _pageTitleUpdated, value);
         }
 
         private event Action<string> _pageTitleUpdated;
@@ -89,26 +52,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnClose
         {
-            add
-            {
-                if (_close == null)
-                {
-                    BridgeConnector.On("browserWindow-close" + Id, () =>
-                    {
-                        _close();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-close", Id);
-                }
-                _close += value;
-            }
-            remove
-            {
-                _close -= value;
-
-                if (_close == null)
-                    BridgeConnector.Off("browserWindow-close" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-close", Id, _close, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-close", Id, _close, value);
         }
 
         private event Action _close;
@@ -120,26 +65,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnClosed
         {
-            add
-            {
-                if (_closed == null)
-                {
-                    BridgeConnector.On("browserWindow-closed" + Id, () =>
-                    {
-                        _closed();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-closed", Id);
-                }
-                _closed += value;
-            }
-            remove
-            {
-                _closed -= value;
-
-                if (_closed == null)
-                    BridgeConnector.Off("browserWindow-closed" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-closed", Id, _closed, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-closed", Id, _closed, value);
         }
 
         private event Action _closed;
@@ -150,26 +77,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnSessionEnd
         {
-            add
-            {
-                if (_sessionEnd == null)
-                {
-                    BridgeConnector.On("browserWindow-session-end" + Id, () =>
-                    {
-                        _sessionEnd();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-session-end", Id);
-                }
-                _sessionEnd += value;
-            }
-            remove
-            {
-                _sessionEnd -= value;
-
-                if (_sessionEnd == null)
-                    BridgeConnector.Off("browserWindow-session-end" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-session-end", Id, _sessionEnd, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-session-end", Id, _sessionEnd, value);
         }
 
         private event Action _sessionEnd;
@@ -179,26 +88,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnUnresponsive
         {
-            add
-            {
-                if (_unresponsive == null)
-                {
-                    BridgeConnector.On("browserWindow-unresponsive" + Id, () =>
-                    {
-                        _unresponsive();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-unresponsive", Id);
-                }
-                _unresponsive += value;
-            }
-            remove
-            {
-                _unresponsive -= value;
-
-                if (_unresponsive == null)
-                    BridgeConnector.Off("browserWindow-unresponsive" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-unresponsive", Id, _unresponsive, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-unresponsive", Id, _unresponsive, value);
         }
 
         private event Action _unresponsive;
@@ -208,26 +99,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnResponsive
         {
-            add
-            {
-                if (_responsive == null)
-                {
-                    BridgeConnector.On("browserWindow-responsive" + Id, () =>
-                    {
-                        _responsive();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-responsive", Id);
-                }
-                _responsive += value;
-            }
-            remove
-            {
-                _responsive -= value;
-
-                if (_responsive == null)
-                    BridgeConnector.Off("browserWindow-responsive" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-responsive", Id, _responsive, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-responsive", Id, _responsive, value);
         }
 
         private event Action _responsive;
@@ -237,26 +110,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnBlur
         {
-            add
-            {
-                if (_blur == null)
-                {
-                    BridgeConnector.On("browserWindow-blur" + Id, () =>
-                    {
-                        _blur();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-blur", Id);
-                }
-                _blur += value;
-            }
-            remove
-            {
-                _blur -= value;
-
-                if (_blur == null)
-                    BridgeConnector.Off("browserWindow-blur" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-blur", Id, _blur, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-blur", Id, _blur, value);
         }
 
         private event Action _blur;
@@ -266,26 +121,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnFocus
         {
-            add
-            {
-                if (_focus == null)
-                {
-                    BridgeConnector.On("browserWindow-focus" + Id, () =>
-                    {
-                        _focus();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-focus", Id);
-                }
-                _focus += value;
-            }
-            remove
-            {
-                _focus -= value;
-
-                if (_focus == null)
-                    BridgeConnector.Off("browserWindow-focus" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-focus", Id, _focus, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-focus", Id, _focus, value);
         }
 
         private event Action _focus;
@@ -295,26 +132,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnShow
         {
-            add
-            {
-                if (_show == null)
-                {
-                    BridgeConnector.On("browserWindow-show" + Id, () =>
-                    {
-                        _show();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-show", Id);
-                }
-                _show += value;
-            }
-            remove
-            {
-                _show -= value;
-
-                if (_show == null)
-                    BridgeConnector.Off("browserWindow-show" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-show", Id, _show, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-show", Id, _show, value);
         }
 
         private event Action _show;
@@ -324,26 +143,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnHide
         {
-            add
-            {
-                if (_hide == null)
-                {
-                    BridgeConnector.On("browserWindow-hide" + Id, () =>
-                    {
-                        _hide();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-hide", Id);
-                }
-                _hide += value;
-            }
-            remove
-            {
-                _hide -= value;
-
-                if (_hide == null)
-                    BridgeConnector.Off("browserWindow-hide" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-hide", Id, _hide, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-hide", Id, _hide, value);
         }
 
         private event Action _hide;
@@ -353,26 +154,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnMaximize
         {
-            add
-            {
-                if (_maximize == null)
-                {
-                    BridgeConnector.On("browserWindow-maximize" + Id, () =>
-                    {
-                        _maximize();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-maximize", Id);
-                }
-                _maximize += value;
-            }
-            remove
-            {
-                _maximize -= value;
-
-                if (_maximize == null)
-                    BridgeConnector.Off("browserWindow-maximize" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-maximize", Id, _maximize, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-maximize", Id, _maximize, value);
         }
 
         private event Action _maximize;
@@ -382,26 +165,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnUnmaximize
         {
-            add
-            {
-                if (_unmaximize == null)
-                {
-                    BridgeConnector.On("browserWindow-unmaximize" + Id, () =>
-                    {
-                        _unmaximize();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-unmaximize", Id);
-                }
-                _unmaximize += value;
-            }
-            remove
-            {
-                _unmaximize -= value;
-
-                if (_unmaximize == null)
-                    BridgeConnector.Off("browserWindow-unmaximize" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-unmaximize", Id, _unmaximize, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-unmaximize", Id, _unmaximize, value);
         }
 
         private event Action _unmaximize;
@@ -411,26 +176,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnMinimize
         {
-            add
-            {
-                if (_minimize == null)
-                {
-                    BridgeConnector.On("browserWindow-minimize" + Id, () =>
-                    {
-                        _minimize();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-minimize", Id);
-                }
-                _minimize += value;
-            }
-            remove
-            {
-                _minimize -= value;
-
-                if (_minimize == null)
-                    BridgeConnector.Off("browserWindow-minimize" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-minimize", Id, _minimize, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-minimize", Id, _minimize, value);
         }
 
         private event Action _minimize;
@@ -440,26 +187,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnRestore
         {
-            add
-            {
-                if (_restore == null)
-                {
-                    BridgeConnector.On("browserWindow-restore" + Id, () =>
-                    {
-                        _restore();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-restore", Id);
-                }
-                _restore += value;
-            }
-            remove
-            {
-                _restore -= value;
-
-                if (_restore == null)
-                    BridgeConnector.Off("browserWindow-restore" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-restore", Id, _restore, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-restore", Id, _restore, value);
         }
 
         private event Action _restore;
@@ -471,26 +200,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnResize
         {
-            add
-            {
-                if (_resize == null)
-                {
-                    BridgeConnector.On("browserWindow-resize" + Id, () =>
-                    {
-                        _resize();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-resize", Id);
-                }
-                _resize += value;
-            }
-            remove
-            {
-                _resize -= value;
-
-                if (_resize == null)
-                    BridgeConnector.Off("browserWindow-resize" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-resize", Id, _resize, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-resize", Id, _resize, value);
         }
 
         private event Action _resize;
@@ -504,26 +215,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnMove
         {
-            add
-            {
-                if (_move == null)
-                {
-                    BridgeConnector.On("browserWindow-move" + Id, () =>
-                    {
-                        _move();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-move", Id);
-                }
-                _move += value;
-            }
-            remove
-            {
-                _move -= value;
-
-                if (_move == null)
-                    BridgeConnector.Off("browserWindow-move" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-move", Id, _move, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-move", Id, _move, value);
         }
 
         private event Action _move;
@@ -535,26 +228,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnMoved
         {
-            add
-            {
-                if (_moved == null)
-                {
-                    BridgeConnector.On("browserWindow-moved" + Id, () =>
-                    {
-                        _moved();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-moved", Id);
-                }
-                _moved += value;
-            }
-            remove
-            {
-                _moved -= value;
-
-                if (_moved == null)
-                    BridgeConnector.Off("browserWindow-moved" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-moved", Id, _moved, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-moved", Id, _moved, value);
         }
 
         private event Action _moved;
@@ -564,26 +239,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnEnterFullScreen
         {
-            add
-            {
-                if (_enterFullScreen == null)
-                {
-                    BridgeConnector.On("browserWindow-enter-full-screen" + Id, () =>
-                    {
-                        _enterFullScreen();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-enter-full-screen", Id);
-                }
-                _enterFullScreen += value;
-            }
-            remove
-            {
-                _enterFullScreen -= value;
-
-                if (_enterFullScreen == null)
-                    BridgeConnector.Off("browserWindow-enter-full-screen" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-enter-full-screen", Id, _enterFullScreen, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-enter-full-screen", Id, _enterFullScreen, value);
         }
 
         private event Action _enterFullScreen;
@@ -593,26 +250,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnLeaveFullScreen
         {
-            add
-            {
-                if (_leaveFullScreen == null)
-                {
-                    BridgeConnector.On("browserWindow-leave-full-screen" + Id, () =>
-                    {
-                        _leaveFullScreen();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-leave-full-screen", Id);
-                }
-                _leaveFullScreen += value;
-            }
-            remove
-            {
-                _leaveFullScreen -= value;
-
-                if (_leaveFullScreen == null)
-                    BridgeConnector.Off("browserWindow-leave-full-screen" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-leave-full-screen", Id, _leaveFullScreen, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-leave-full-screen", Id, _leaveFullScreen, value);
         }
 
         private event Action _leaveFullScreen;
@@ -622,26 +261,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnEnterHtmlFullScreen
         {
-            add
-            {
-                if (_enterHtmlFullScreen == null)
-                {
-                    BridgeConnector.On("browserWindow-enter-html-full-screen" + Id, () =>
-                    {
-                        _enterHtmlFullScreen();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-enter-html-full-screen", Id);
-                }
-                _enterHtmlFullScreen += value;
-            }
-            remove
-            {
-                _enterHtmlFullScreen -= value;
-
-                if (_enterHtmlFullScreen == null)
-                    BridgeConnector.Off("browserWindow-enter-html-full-screen" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-enter-html-full-screen", Id, _enterHtmlFullScreen, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-enter-html-full-screen", Id, _enterHtmlFullScreen, value);
         }
 
         private event Action _enterHtmlFullScreen;
@@ -651,26 +272,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action OnLeaveHtmlFullScreen
         {
-            add
-            {
-                if (_leaveHtmlFullScreen == null)
-                {
-                    BridgeConnector.On("browserWindow-leave-html-full-screen" + Id, () =>
-                    {
-                        _leaveHtmlFullScreen();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-leave-html-full-screen", Id);
-                }
-                _leaveHtmlFullScreen += value;
-            }
-            remove
-            {
-                _leaveHtmlFullScreen -= value;
-
-                if (_leaveHtmlFullScreen == null)
-                    BridgeConnector.Off("browserWindow-leave-html-full-screen" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-leave-html-full-screen", Id, _leaveHtmlFullScreen, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-leave-html-full-screen", Id, _leaveHtmlFullScreen, value);
         }
 
         private event Action _leaveHtmlFullScreen;
@@ -688,26 +291,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action<string> OnAppCommand
         {
-            add
-            {
-                if (_appCommand == null)
-                {
-                    BridgeConnector.On<string>("browserWindow-app-command" + Id, (command) =>
-                    {
-                        _appCommand(command);
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-app-command", Id);
-                }
-                _appCommand += value;
-            }
-            remove
-            {
-                _appCommand -= value;
-
-                if (_appCommand == null)
-                    BridgeConnector.Off("browserWindow-app-command" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-app-command", Id, _appCommand, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-app-command", Id, _appCommand, value);
         }
 
         private event Action<string> _appCommand;
@@ -718,26 +303,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action<string> OnSwipe
         {
-            add
-            {
-                if (_swipe == null)
-                {
-                    BridgeConnector.On<string>("browserWindow-swipe" + Id, (direction) =>
-                    {
-                        _swipe(direction);
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-swipe", Id);
-                }
-                _swipe += value;
-            }
-            remove
-            {
-                _swipe -= value;
-
-                if (_swipe == null)
-                    BridgeConnector.Off("browserWindow-swipe" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-swipe", Id, _swipe, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-swipe", Id, _swipe, value);
         }
 
         private event Action<string> _swipe;
@@ -748,26 +315,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnSheetBegin
         {
-            add
-            {
-                if (_sheetBegin == null)
-                {
-                    BridgeConnector.On("browserWindow-sheet-begin" + Id, () =>
-                    {
-                        _sheetBegin();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-sheet-begin", Id);
-                }
-                _sheetBegin += value;
-            }
-            remove
-            {
-                _sheetBegin -= value;
-
-                if (_sheetBegin == null)
-                    BridgeConnector.Off("browserWindow-sheet-begin" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-sheet-begin", Id, _sheetBegin, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-sheet-begin", Id, _sheetBegin, value);
         }
 
         private event Action _sheetBegin;
@@ -778,26 +327,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnSheetEnd
         {
-            add
-            {
-                if (_sheetEnd == null)
-                {
-                    BridgeConnector.On("browserWindow-sheet-end" + Id, () =>
-                    {
-                        _sheetEnd();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-sheet-end", Id);
-                }
-                _sheetEnd += value;
-            }
-            remove
-            {
-                _sheetEnd -= value;
-
-                if (_sheetEnd == null)
-                    BridgeConnector.Off("browserWindow-sheet-end" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-sheet-end", Id, _sheetEnd, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-sheet-end", Id, _sheetEnd, value);
         }
 
         private event Action _sheetEnd;
@@ -808,26 +339,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action OnNewWindowForTab
         {
-            add
-            {
-                if (_newWindowForTab == null)
-                {
-                    BridgeConnector.On("browserWindow-new-window-for-tab" + Id, () =>
-                    {
-                        _newWindowForTab();
-                    });
-
-                    BridgeConnector.Emit("register-browserWindow-new-window-for-tab", Id);
-                }
-                _newWindowForTab += value;
-            }
-            remove
-            {
-                _newWindowForTab -= value;
-
-                if (_newWindowForTab == null)
-                    BridgeConnector.Off("browserWindow-new-window-for-tab" + Id);
-            }
+            add => ElectronEventManager.AddEvent("browserWindow-new-window-for-tab", Id, _newWindowForTab, value);
+            remove => ElectronEventManager.RemoveEvent("browserWindow-new-window-for-tab", Id, _newWindowForTab, value);
         }
 
         private event Action _newWindowForTab;
