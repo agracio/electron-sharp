@@ -11,17 +11,17 @@ internal class TaskReturnArguments<T>(string guid, TaskCompletionSource<T> taskC
 
 internal static class ElectronTaskManager
 {
-    internal static Task CreateTask(string eventName, object id)
+    internal static Task CreateTask(string eventName, object id, object args = null)
     {
         var taskReturnArguments = CreateNullTask(eventName);
-        BridgeConnector.Emit(eventName, id, taskReturnArguments.Guid);
-        return taskReturnArguments.TaskCompletionSource.Task;
-    }
-    
-    internal static Task CreateTask(string eventName, object id, object args)
-    {
-        var taskReturnArguments = CreateNullTask(eventName);
-        BridgeConnector.Emit(eventName, id, args, taskReturnArguments.Guid);
+        if (args != null)
+        {
+            BridgeConnector.Emit(eventName, id, args, taskReturnArguments.Guid);
+        }
+        else
+        {
+            BridgeConnector.Emit(eventName, id, taskReturnArguments.Guid);              
+        }
         return taskReturnArguments.TaskCompletionSource.Task;
     }
     
@@ -61,18 +61,19 @@ internal static class ElectronTaskManager
     //
     //     return taskReturnArguments.TaskCompletionSource.Task;
     // }
-
-    internal static Task<string> CreateStringTask(string eventName, object id)
-    {
-        var taskReturnArguments = CreateResultTask(eventName);
-        BridgeConnector.Emit(eventName, id, taskReturnArguments.Guid);
-        return taskReturnArguments.TaskCompletionSource.Task;
-    }
     
-    internal static Task<string> CreateStringTask(string eventName, object id, object args)
+    internal static Task<string> CreateStringTask(string eventName, object id, object args = null)
     {
         var taskReturnArguments = CreateResultTask(eventName);
-        BridgeConnector.Emit(eventName, id, args, taskReturnArguments.Guid);
+        if (args != null)
+        {
+            BridgeConnector.Emit(eventName, id, args, taskReturnArguments.Guid);
+        }
+        else
+        {
+            BridgeConnector.Emit(eventName, id, taskReturnArguments.Guid);              
+        }
+
         return taskReturnArguments.TaskCompletionSource.Task;
     }
 
