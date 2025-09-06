@@ -47,18 +47,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task ClearAuthCacheAsync(RemovePassword options)
         {
-            var    taskCompletionSource = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On("webContents-session-clearAuthCache-completed" + guid, () =>
-            {
-                BridgeConnector.Off("webContents-session-clearAuthCache-completed" + guid);
-                taskCompletionSource.SetResult(null);
-            });
-
-            BridgeConnector.Emit("webContents-session-clearAuthCache", Id, options, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask("webContents-session-clearAuthCache", Id, options);
         }
 
         /// <summary>
@@ -66,18 +55,7 @@ namespace ElectronSharp.API
         /// </summary>
         public Task ClearAuthCacheAsync()
         {
-            var    taskCompletionSource = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On("webContents-session-clearAuthCache-completed" + guid, () =>
-            {
-                BridgeConnector.Off("webContents-session-clearAuthCache-completed" + guid);
-                taskCompletionSource.SetResult(null);
-            });
-
-            BridgeConnector.Emit("webContents-session-clearAuthCache", Id, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask("webContents-session-clearAuthCache", Id);
         }
 
         /// <summary>
@@ -86,18 +64,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task ClearCacheAsync()
         {
-            var    taskCompletionSource = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On("webContents-session-clearCache-completed" + guid, () =>
-            {
-                BridgeConnector.Off("webContents-session-clearCache-completed" + guid);
-                taskCompletionSource.SetResult(null);
-            });
-
-            BridgeConnector.Emit("webContents-session-clearCache", Id, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask("webContents-session-clearCache", Id);
         }
 
         /// <summary>
@@ -106,18 +73,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task ClearHostResolverCacheAsync()
         {
-            var    taskCompletionSource = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On("webContents-session-clearHostResolverCache-completed" + guid, () =>
-            {
-                BridgeConnector.Off("webContents-session-clearHostResolverCache-completed" + guid);
-                taskCompletionSource.SetResult(null);
-            });
-
-            BridgeConnector.Emit("webContents-session-clearHostResolverCache", Id, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask("webContents-session-clearHostResolverCache", Id);
         }
 
         /// <summary>
@@ -126,18 +82,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task ClearStorageDataAsync()
         {
-            var    taskCompletionSource = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On("webContents-session-clearStorageData-completed" + guid, () =>
-            {
-                BridgeConnector.Off("webContents-session-clearStorageData-completed" + guid);
-                taskCompletionSource.SetResult(null);
-            });
-
-            BridgeConnector.Emit("webContents-session-clearStorageData", Id, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask("webContents-session-clearStorageData", Id);
         }
 
         /// <summary>
@@ -147,18 +92,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task ClearStorageDataAsync(ClearStorageDataOptions options)
         {
-            var    taskCompletionSource = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On("webContents-session-clearStorageData-options-completed" + guid, () =>
-            {
-                BridgeConnector.Off("webContents-session-clearStorageData-options-completed" + guid);
-                taskCompletionSource.SetResult(null);
-            });
-
-            BridgeConnector.Emit("webContents-session-clearStorageData-options", Id, options, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask("webContents-session-clearStorageData-options", Id, options);
         }
 
         /// <summary>
@@ -207,18 +141,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task<int[]> GetBlobDataAsync(string identifier)
         {
-            var    taskCompletionSource = new TaskCompletionSource<int[]>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On<int[]>("webContents-session-getBlobData-completed" + guid, (buffer) =>
-            {
-                BridgeConnector.Off("webContents-session-getBlobData-completed" + guid);
-                taskCompletionSource.SetResult(buffer);
-            });
-
-            BridgeConnector.Emit("webContents-session-getBlobData", Id, identifier, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask<int[]>("webContents-session-getBlobData", Id, identifier);
         }
 
         /// <summary>
@@ -227,18 +150,7 @@ namespace ElectronSharp.API
         /// <returns>Callback is invoked with the session's current cache size.</returns>
         public Task<int> GetCacheSizeAsync()
         {
-            var    taskCompletionSource = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On<int>("webContents-session-getCacheSize-completed" + guid, (size) =>
-            {
-                BridgeConnector.Off("webContents-session-getCacheSize-completed" + guid);
-                taskCompletionSource.SetResult(size);
-            });
-
-            BridgeConnector.Emit("webContents-session-getCacheSize", Id, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask<int>("webContents-session-getCacheSize", Id);
         }
 
         /// <summary>
@@ -247,18 +159,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task<string[]> GetPreloadsAsync()
         {
-            var    taskCompletionSource = new TaskCompletionSource<string[]>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On<string[]>("webContents-session-getPreloads-completed" + guid, (preloads) =>
-            {
-                BridgeConnector.Off("webContents-session-getPreloads-completed" + guid);
-                taskCompletionSource.SetResult(preloads);
-            });
-
-            BridgeConnector.Emit("webContents-session-getPreloads", Id, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask<string[]>("webContents-session-getPreloads", Id);
         }
 
         /// <summary>
@@ -267,18 +168,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task<string> GetUserAgent()
         {
-            var    taskCompletionSource = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On<string>("webContents-session-getUserAgent-completed" + guid, (userAgent) =>
-            {
-                BridgeConnector.Off("webContents-session-getUserAgent-completed" + guid);
-                taskCompletionSource.SetResult(userAgent.ToString());
-            });
-
-            BridgeConnector.Emit("webContents-session-getUserAgent", Id, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateStringTask("webContents-session-getUserAgent", Id);
         }
 
         /// <summary>
@@ -289,18 +179,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task<string> ResolveProxyAsync(string url)
         {
-            var    taskCompletionSource = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On<string>("webContents-session-resolveProxy-completed" + guid, (proxy) =>
-            {
-                BridgeConnector.Off("webContents-session-resolveProxy-completed" + guid);
-                taskCompletionSource.SetResult(proxy.ToString());
-            });
-
-            BridgeConnector.Emit("webContents-session-resolveProxy", Id, url, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateStringTask("webContents-session-resolveProxy", Id, url);
         }
 
         /// <summary>
@@ -331,18 +210,7 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task SetProxyAsync(ProxyConfig config)
         {
-            var    taskCompletionSource = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-            string guid                 = Guid.NewGuid().ToString();
-
-            BridgeConnector.On("webContents-session-setProxy-completed" + guid, () =>
-            {
-                BridgeConnector.Off("webContents-session-setProxy-completed" + guid);
-                taskCompletionSource.SetResult(null);
-            });
-
-            BridgeConnector.Emit("webContents-session-setProxy", Id, config, guid);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask("webContents-session-setProxy", Id, config);
         }
 
         /// <summary>
@@ -379,17 +247,21 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task<ChromeExtensionInfo[]> GetAllExtensionsAsync()
         {
-            var taskCompletionSource = new TaskCompletionSource<ChromeExtensionInfo[]>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-            BridgeConnector.On<ChromeExtensionInfo[]>("webContents-session-getAllExtensions-completed", (extensionslist) =>
-            {
-                BridgeConnector.Off("webContents-session-getAllExtensions-completed");
-                taskCompletionSource.SetResult(extensionslist);
-            });
-
-            BridgeConnector.Emit("webContents-session-getAllExtensions", Id);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask<ChromeExtensionInfo[]>("webContents-session-getAllExtensions", Id, noGuid: true);
+            
+            // TODO: These calls do not use Guid in BridgeConnector.Emit(), need to confirm if this is desired behaviour
+            
+            // var taskCompletionSource = new TaskCompletionSource<ChromeExtensionInfo[]>(TaskCreationOptions.RunContinuationsAsynchronously);
+            //
+            // BridgeConnector.On<ChromeExtensionInfo[]>("webContents-session-getAllExtensions-completed", (extensionslist) =>
+            // {
+            //     BridgeConnector.Off("webContents-session-getAllExtensions-completed");
+            //     taskCompletionSource.SetResult(extensionslist);
+            // });
+            //
+            // BridgeConnector.Emit("webContents-session-getAllExtensions", Id);
+            //
+            // return taskCompletionSource.Task;
         }
 
         /// <summary>
@@ -431,18 +303,22 @@ namespace ElectronSharp.API
         /// <returns></returns>
         public Task<Extension> LoadExtensionAsync(string path, bool allowFileAccess = false)
         {
-            var taskCompletionSource = new TaskCompletionSource<Extension>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-            BridgeConnector.On<Extension>("webContents-session-loadExtension-completed", (extension) =>
-            {
-                BridgeConnector.Off("webContents-session-loadExtension-completed");
-
-                taskCompletionSource.SetResult(extension);
-            });
-
-            BridgeConnector.Emit("webContents-session-loadExtension", Id, path, allowFileAccess);
-
-            return taskCompletionSource.Task;
+            return ElectronTaskManager.CreateTask<Extension>("webContents-session-getAllExtensions", Id, path, allowFileAccess);
+            
+            // TODO: These calls do not use Guid in BridgeConnector.Emit(), need to confirm if this is desired behaviour
+            
+            // var taskCompletionSource = new TaskCompletionSource<Extension>(TaskCreationOptions.RunContinuationsAsynchronously);
+            //
+            // BridgeConnector.On<Extension>("webContents-session-loadExtension-completed", (extension) =>
+            // {
+            //     BridgeConnector.Off("webContents-session-loadExtension-completed");
+            //
+            //     taskCompletionSource.SetResult(extension);
+            // });
+            //
+            // BridgeConnector.Emit("webContents-session-loadExtension", Id, path, allowFileAccess);
+            //
+            // return taskCompletionSource.Task;
         }
     }
 }

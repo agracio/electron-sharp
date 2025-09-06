@@ -50,6 +50,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action Activate
         {
+            // TODO: this is the only event that explicitly checks platform before calling event, need to confirm if this is desired behaviour
+            
             add
             {
                 if (_appActivate == null)
@@ -85,6 +87,29 @@ namespace ElectronSharp.API
         {
             add => ElectronEventManager.AddEventNoEmit("app-activate-from-second-instance", string.Empty, _appActivateFromSecondInstance, value);
             remove => ElectronEventManager.RemoveEvent("app-activate-from-second-instance", string.Empty, _appActivateFromSecondInstance, value);
+            
+            //TODO: the only event that does not call BridgeConnector.Emit(), need to confirm if this is desired behaviour
+            
+            // add
+            // {
+            //     if (_appActivateFromSecondInstance == null)
+            //     {
+            //         BridgeConnector.On<string[]>("app-activate-from-second-instance", (args) =>
+            //         {
+            //             _appActivateFromSecondInstance(args);
+            //         });
+            //     }
+            //     _appActivateFromSecondInstance += value;
+            // }
+            // remove
+            // {
+            //     _appActivateFromSecondInstance -= value;
+            //
+            //     if (_appActivateFromSecondInstance == null)
+            //     {
+            //         BridgeConnector.Off("app-activate-from-second-instance");
+            //     }
+            // }
         }
 
         private event Action<string[]> _appActivateFromSecondInstance;
