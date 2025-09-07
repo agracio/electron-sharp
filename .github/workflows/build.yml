@@ -42,7 +42,7 @@ env:
 jobs:
   build:
     runs-on: windows-2025
-    strategy:
+#    strategy:
 #      matrix:
 #        os: [ 'windows-2025']
     steps:
