@@ -1,0 +1,73 @@
+name: build
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - '.github/FUNDING.YML'
+      - '.github/dependabot.yml'
+      - '.github/Issue_TEMPLATE/**'
+      - '**/*.md'
+      - '.gitconfig'
+      - '.gitignore'
+      - 'LICENSE*'
+      - '.idea/**'
+      - '.vscode/**'
+      - '*.bat'
+      - '.npmignore'
+      - '.circleci/*'
+      - 'README.md'
+
+  push:
+    paths-ignore:
+      - '.github/FUNDING.YML'
+      - '.github/dependabot.yml'
+      - '.github/Issue_TEMPLATE/**'
+      - '**/*.md'
+      - '.gitconfig'
+      - '.gitignore'
+      - 'LICENSE*'
+      - '.idea/**'
+      - '.vscode/**'
+      - '*.bat'
+      - '.npmignore'
+      - '.circleci/*'
+      - 'README.md'
+
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1 
+  DOTNET_NOLOGO: 1 
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ 'windows-2025']
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+    #   - name: Cache NuGet
+    #     uses: actions/cache@v4
+    #     with:
+    #         path: ~/.nuget/packages
+    #         key: nuget-${{ matrix.os }}-${{ hashFiles('**/*.csproj') }}
+    #         restore-keys: |
+    #             ${{ matrix.os }}-nuget-
+
+    #   - name: Setup dotnet
+    #     uses: actions/setup-dotnet@v5
+    #     with:
+    #         dotnet-version: '9.0.x' 
+
+    #   - name: Install dependencies
+    #     run: npm install
+
+    #   - name: Build
+    #     run: npm run build --if-present
+
+    #   - name: Test
+    #     run: npm test
