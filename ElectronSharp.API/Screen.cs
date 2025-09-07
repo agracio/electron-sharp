@@ -14,8 +14,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<Display> OnDisplayAdded
         {
-            add => ElectronEventManager.AddEventNoSuffix("screen-display-added-event", GetHashCode(), _onDisplayAdded, value);
-            remove => ElectronEventManager.RemoveEvent("screen-display-added-event", GetHashCode(), _onDisplayAdded, value);
+            add => ElectronEventManager.AddEvent("screen-display-added", GetHashCode(), _onDisplayAdded, value);
+            remove => ElectronEventManager.RemoveEvent("screen-display-added", GetHashCode(), _onDisplayAdded, value);
         }
 
         private event Action<Display> _onDisplayAdded;
@@ -25,8 +25,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<Display> OnDisplayRemoved
         {
-            add => ElectronEventManager.AddEventNoSuffix("screen-display-removed-event", GetHashCode(), _onDisplayRemoved, value);
-            remove => ElectronEventManager.RemoveEvent("screen-display-removed-event", GetHashCode(), _onDisplayRemoved, value);
+            add => ElectronEventManager.AddEvent("screen-display-removed", GetHashCode(), _onDisplayRemoved, value);
+            remove => ElectronEventManager.RemoveEvent("screen-display-removed", GetHashCode(), _onDisplayRemoved, value);
         }
 
         private event Action<Display> _onDisplayRemoved;
@@ -38,8 +38,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<Display, string[]> OnDisplayMetricsChanged
         {
-            add => ElectronEventManager.AddScreenEvent("screen-display-metrics-changed-event", GetHashCode(), _onDisplayMetricsChanged, value);
-            remove => ElectronEventManager.RemoveScreenEvent("screen-display-metrics-changed-event", GetHashCode(), _onDisplayMetricsChanged, value);
+            add => ElectronEventManager.AddScreenEvent("screen-display-metrics-changed", GetHashCode(), _onDisplayMetricsChanged, value);
+            remove => ElectronEventManager.RemoveScreenEvent("screen-display-metrics-changed", GetHashCode(), _onDisplayMetricsChanged, value);
         }
 
         private event Action<Display, string[]> _onDisplayMetricsChanged;

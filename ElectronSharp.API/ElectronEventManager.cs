@@ -7,13 +7,12 @@ namespace ElectronSharp.API;
 
 internal static class ElectronEventManager
 {
-    internal static void AddEvent(string eventName, object id, Action callback, Action value, string suffix = "", bool emit = true, bool noSuffix = false)
+    internal static void AddEvent(string eventName, object id, Action callback, Action value, string suffix = "", bool emit = true)
     {
         if (callback == null)
         {
-            var emitEventName = noSuffix ? $"register-{eventName.Replace("-event", string.Empty)}" : $"register-{eventName}{suffix}";
             BridgeConnector.On(eventName + id, () => { callback(); });
-            if (emit) BridgeConnector.Emit(emitEventName, id);
+            if (emit) BridgeConnector.Emit($"register-{eventName}{suffix}", id);
             callback += value;
         }
     }
@@ -23,12 +22,22 @@ internal static class ElectronEventManager
         AddEvent(eventName, id, callback, value, "-event");
     }
     
-    internal static void AddEventNoSuffix(string eventName, object id, Action callback, Action value)
+    internal static void AddEvent<T>(string eventName, object id, Action<T> callback, Action<T> value, string suffix = "", bool emit = true)
     {
-        AddEvent(eventName, id, callback, value, noSuffix: true);
+        if (callback == null)
+        {
+            BridgeConnector.On<T>(eventName + id, (args) => { callback(args); });
+            if (emit) BridgeConnector.Emit($"register-{eventName}{suffix}", id);
+            callback += value;
+        }
     }
     
-    internal static void AddEventNoEmit(string eventName, object id, Action callback, Action value)
+    internal static void AddEventWithSuffix<T>(string eventName, object id, Action<T> callback, Action<T> value)
+    {
+        AddEvent(eventName, id, callback, value, "-event");
+    }
+
+    internal static void AddEventNoEmit<T>(string eventName, object id, Action<T> callback, Action<T> value)
     {
         AddEvent(eventName, id, callback, value, emit: false);
     }
@@ -38,32 +47,6 @@ internal static class ElectronEventManager
         callback -= value;
 
         if (callback == null) BridgeConnector.Off(eventName + id);
-    }
-    
-    internal static void AddEvent<T>(string eventName, object id, Action<T> callback, Action<T> value, string suffix = "", bool emit = true, bool noSuffix = false)
-    {
-        if (callback == null)
-        {
-            var emitEventName = noSuffix ? $"register-{eventName.Replace("-event", string.Empty)}" : $"register-{eventName}{suffix}";
-            BridgeConnector.On<T>(eventName + id, (args) => { callback(args); });
-            if (emit) BridgeConnector.Emit(emitEventName, id);
-            callback += value;
-        }
-    }
-    
-    internal static void AddEventWithSuffix<T>(string eventName, object id, Action<T> callback, Action<T> value)
-    {
-        AddEvent(eventName, id, callback, value, "-event");
-    }
-    
-    internal static void AddEventNoSuffix<T>(string eventName, object id, Action<T> callback, Action<T> value)
-    {
-        AddEvent(eventName, id, callback, value, noSuffix: true);
-    }
-
-    internal static void AddEventNoEmit<T>(string eventName, object id, Action<T> callback, Action<T> value)
-    {
-        AddEvent(eventName, id, callback, value, emit: false);
     }
     
     internal static void RemoveEvent<T>(string eventName, object id, Action<T> callback, Action<T> value)
@@ -77,7 +60,7 @@ internal static class ElectronEventManager
         if (callback == null)
         {
             BridgeConnector.On<TrayClickEventResponse>(eventName + id, (result) => { callback(result.eventArgs, result.bounds); });
-            BridgeConnector.Emit($"register-{eventName.Replace("-event", string.Empty)}", id);
+            BridgeConnector.Emit($"register-{eventName}", id);
             callback += value;
         }
     }
@@ -93,7 +76,7 @@ internal static class ElectronEventManager
         if (callback == null)
         {
             BridgeConnector.On<DisplayChanged>(eventName + id, (args) => { callback(args.display, args.metrics); });
-            BridgeConnector.Emit($"register-{eventName.Replace("-event", string.Empty)}", id);
+            BridgeConnector.Emit($"register-{eventName}", id);
             callback += value;
         }
     }

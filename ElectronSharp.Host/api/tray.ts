@@ -9,7 +9,7 @@ export = (socket: Socket) => {
     socket.on('register-tray-click', (id) => {
         if (tray.value && !tray.value.isDestroyed()) {
             tray.value.on('click', (event, bounds) => {
-                electronSocket.emit('tray-click-event' + id, {eventArgs: (<any>event).__proto__, bounds: bounds});
+                electronSocket.emit('tray-click' + id, {eventArgs: (<any>event).__proto__, bounds: bounds});
             });
         }
     });
@@ -17,7 +17,7 @@ export = (socket: Socket) => {
     socket.on('register-tray-right-click', (id) => {
         if (tray.value && !tray.value.isDestroyed()) {
             tray.value.on('right-click', (event, bounds) => {
-                electronSocket.emit('tray-right-click-event' + id, {eventArgs: (<any>event).__proto__, bounds: bounds});
+                electronSocket.emit('tray-right-click' + id, {eventArgs: (<any>event).__proto__, bounds: bounds});
             });
         }
     });
@@ -25,7 +25,7 @@ export = (socket: Socket) => {
     socket.on('register-tray-double-click', (id) => {
         if (tray.value && !tray.value.isDestroyed()) {
             tray.value.on('double-click', (event, bounds) => {
-                electronSocket.emit('tray-double-click-event' + id, {
+                electronSocket.emit('tray-double-click' + id, {
                     eventArgs: (<any>event).__proto__,
                     bounds: bounds
                 });
@@ -36,7 +36,7 @@ export = (socket: Socket) => {
     socket.on('register-tray-balloon-show', (id) => {
         if (tray.value && !tray.value.isDestroyed()) {
             tray.value.on('balloon-show', () => {
-                electronSocket.emit('tray-balloon-show-event' + id);
+                electronSocket.emit('tray-balloon-show' + id);
             });
         }
     });
@@ -44,7 +44,7 @@ export = (socket: Socket) => {
     socket.on('register-tray-balloon-click', (id) => {
         if (tray.value && !tray.value.isDestroyed()) {
             tray.value.on('balloon-click', () => {
-                electronSocket.emit('tray-balloon-click-event' + id);
+                electronSocket.emit('tray-balloon-click' + id);
             });
         }
     });
@@ -52,7 +52,7 @@ export = (socket: Socket) => {
     socket.on('register-tray-balloon-closed', (id) => {
         if (tray.value && !tray.value.isDestroyed()) {
             tray.value.on('balloon-closed', () => {
-                electronSocket.emit('tray-balloon-closed-event' + id);
+                electronSocket.emit('tray-balloon-closed' + id);
             });
         }
     });
@@ -118,7 +118,7 @@ export = (socket: Socket) => {
 
     socket.on('register-tray-on-event', (eventName, listenerName) => {
         if (tray.value && !tray.value.isDestroyed()) {
-            tray.value.on(eventName, (...args) => {
+            tray.value.on(eventName, (...args: any[]) => {
                 if (args.length > 1) {
                     electronSocket.emit(listenerName, args[1]);
                 } else {
@@ -130,7 +130,7 @@ export = (socket: Socket) => {
 
     socket.on('register-tray-once-event', (eventName, listenerName) => {
         if (tray.value && !tray.value.isDestroyed()) {
-            tray.value.once(eventName, (...args) => {
+            tray.value.once(eventName, (...args: any[]) => {
                 if (args.length > 1) {
                     electronSocket.emit(listenerName, args[1]);
                 } else {

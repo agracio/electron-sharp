@@ -22,8 +22,8 @@ namespace ElectronSharp.API
         /// </summary>
         public event Action<TrayClickEventArgs, Rectangle> OnClick
         {
-            add => ElectronEventManager.AddTrayEvent("tray-click-event", GetHashCode(), _click, value);
-            remove => ElectronEventManager.RemoveTrayEvent("tray-click-event", GetHashCode(), _click, value);
+            add => ElectronEventManager.AddTrayEvent("tray-click", GetHashCode(), _click, value);
+            remove => ElectronEventManager.RemoveTrayEvent("tray-click", GetHashCode(), _click, value);
         }
 
         private event Action<TrayClickEventArgs, Rectangle> _click;
@@ -35,8 +35,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action<TrayClickEventArgs, Rectangle> OnRightClick
         {
-            add => ElectronEventManager.AddTrayEvent("tray-right-click-event", GetHashCode(), _rightClick, value);
-            remove => ElectronEventManager.RemoveTrayEvent("tray-right-click-event", GetHashCode(), _rightClick, value);
+            add => ElectronEventManager.AddTrayEvent("tray-right-click", GetHashCode(), _rightClick, value);
+            remove => ElectronEventManager.RemoveTrayEvent("tray-right-click", GetHashCode(), _rightClick, value);
         }
 
         private event Action<TrayClickEventArgs, Rectangle> _rightClick;
@@ -48,8 +48,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("macos")]
         public event Action<TrayClickEventArgs, Rectangle> OnDoubleClick
         {
-            add => ElectronEventManager.AddTrayEvent("tray-double-click-event", GetHashCode(), _doubleClick, value);
-            remove => ElectronEventManager.RemoveTrayEvent("tray-double-click-event", GetHashCode(), _doubleClick, value);
+            add => ElectronEventManager.AddTrayEvent("tray-double-click", GetHashCode(), _doubleClick, value);
+            remove => ElectronEventManager.RemoveTrayEvent("tray-double-click", GetHashCode(), _doubleClick, value);
         }
 
         private event Action<TrayClickEventArgs, Rectangle> _doubleClick;
@@ -60,8 +60,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnBalloonShow
         {
-            add => ElectronEventManager.AddEventNoSuffix("tray-balloon-show-event", GetHashCode(), _balloonShow, value);
-            remove => ElectronEventManager.RemoveEvent("tray-balloon-show-event", GetHashCode(), _balloonShow, value);
+            add => ElectronEventManager.AddEvent("tray-balloon-show", GetHashCode(), _balloonShow, value);
+            remove => ElectronEventManager.RemoveEvent("tray-balloon-show", GetHashCode(), _balloonShow, value);
         }
 
         private event Action _balloonShow;
@@ -72,8 +72,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnBalloonClick
         {
-            add => ElectronEventManager.AddEventNoSuffix("tray-balloon-click-event", GetHashCode(), _balloonClick, value);
-            remove => ElectronEventManager.RemoveEvent("tray-balloon-click-event", GetHashCode(), _balloonClick, value);
+            add => ElectronEventManager.AddEvent("tray-balloon-click", GetHashCode(), _balloonClick, value);
+            remove => ElectronEventManager.RemoveEvent("tray-balloon-click", GetHashCode(), _balloonClick, value);
         }
 
         private event Action _balloonClick;
@@ -85,8 +85,8 @@ namespace ElectronSharp.API
         [SupportedOSPlatform("windows")]
         public event Action OnBalloonClosed
         {
-            add => ElectronEventManager.AddEventNoSuffix("tray-balloon-closed-event", GetHashCode(), _balloonClosed, value);
-            remove => ElectronEventManager.RemoveEvent("tray-balloon-closed-event", GetHashCode(), _balloonClosed, value);
+            add => ElectronEventManager.AddEvent("tray-balloon-closed", GetHashCode(), _balloonClosed, value);
+            remove => ElectronEventManager.RemoveEvent("tray-balloon-closed", GetHashCode(), _balloonClosed, value);
         }
 
         private event Action _balloonClosed;
