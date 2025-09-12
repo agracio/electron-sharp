@@ -71,7 +71,7 @@ jobs:
       - name: tsc build
         run: |
           cd ./ElectronSharp.Host
-          npm start
+          tsc
     
       - name: dotnet build
         run: dotnet build
