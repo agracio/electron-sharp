@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using ElectronSharp.API.Extensions;
 using System.Runtime.Versioning;
 
-//TODO: Implement app.showEmojiPanel and app.isEmojiPanelSupported:  https://www.electronjs.org/docs/api/app#appshowemojipanel-macos-windows
 //TODO: Implement app.moveToApplicationsFolder: https://www.electronjs.org/docs/api/app#appmovetoapplicationsfolderoptions-macos
 
 namespace ElectronSharp.API
@@ -214,6 +213,7 @@ namespace ElectronSharp.API
         /// </summary>
         public event Func<QuitEventArgs, Task> WillQuit
         {
+            // TODO: Both WillQuit and Quitting use "app-will-quit" event, need to confirm if this is correct.
             add
             {
                 if (_willQuit == null)
@@ -553,6 +553,7 @@ namespace ElectronSharp.API
         /// <para/>
         /// You should seek to use the <see cref="FocusOptions.Steal"/> option as sparingly as possible.
         /// </summary>
+        // TODO: Incorrect SupportedOSPlatform attribute, focus(options?: FocusOptions) is supported on all platforms.
         [SupportedOSPlatform("macos")]
         public void Focus(FocusOptions focusOptions)
         {
@@ -1236,7 +1237,24 @@ namespace ElectronSharp.API
         /// is used.
         /// </summary>
         public Task<string> GetUserAgentFallbackAsync() => BridgeConnector.OnResult<string>("appGetUserAgentFallback", "appGetUserAgentFallbackCompleted");
+        
+        /// <summary>
+        /// Whether or not the current OS version allows for native emoji pickers.
+        /// See <see href="https://www.electronjs.org/docs/latest/api/app#appisemojipanelsupported">Electron app docs</see> for more details.
+        /// </summary>
+        /// <returns><see langword="true"/> if current OS version allows for native emoji pickers, <see langword="false"/> otherwise.</returns>
+        public Task<bool> IsEmojiPanelSupportedAsync(CancellationToken cancellationToken = default) => BridgeConnector.OnResult<bool>("appIsEmojiPanelSupported", "appIsEmojiPanelSupportedCompleted", cancellationToken);
 
+        /// <summary>
+        /// Show the platform's native emoji picker.
+        /// </summary>
+        [SupportedOSPlatform("macos")]
+        [SupportedOSPlatform("windows")]
+        public void ShowEmojiPanel()
+        {
+            BridgeConnector.Emit("appShowEmojiPanel");
+        }
+        
         internal void PreventQuit()
         {
             _preventQuit = true;

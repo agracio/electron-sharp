@@ -86,5 +86,4 @@ internal static class ElectronEventManager
         callback -= value;
         if (callback == null) BridgeConnector.Off(eventName + id);
     }
-
 }

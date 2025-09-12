@@ -1,7 +1,4 @@
 ﻿using ElectronSharp.API.Entities;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using ElectronSharp.API.Extensions;
 using System.Runtime.Versioning;

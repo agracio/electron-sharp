@@ -243,6 +243,13 @@ module.exports = (socket, app, firstTime) => {
     socket.on('appSetUserAgentFallback', (userAgent) => {
         app.userAgentFallback = userAgent;
     });
+    socket.on('appIsEmojiPanelSupported', () => {
+        const isEmojiPanelSupported = app.isEmojiPanelSupported();
+        electronSocket.emit('appIsEmojiPanelSupportedCompleted', isEmojiPanelSupported);
+    });
+    socket.on('appShowEmojiPanel', () => {
+        app.showEmojiPanel();
+    });
     socket.on('register-app-on-event', (eventName, listenerName) => {
         app.on(eventName, (...args) => {
             if (args.length > 1) {
