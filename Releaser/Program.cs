@@ -21,39 +21,44 @@ if (!response.IsSuccessStatusCode)
 
 
 var yamlFile    = Path.GetFullPath("../.devops/build-nuget.yaml");
+var ymlFile    = Path.GetFullPath("../.github/workflows/publish.yml");
 var csFile      = Path.GetFullPath("../ElectronSharp.CLI/Commands/BuildCommand.cs");
 var packageFile = Path.GetFullPath("../ElectronSharp.Host/package.json");
 var packagePath = Path.GetFullPath("../ElectronSharp.Host");
 
-if (!File.Exists(yamlFile) || !File.Exists(csFile) || !(File.Exists(packageFile)))
+if (!File.Exists(yamlFile) || !File.Exists(csFile) || !File.Exists(packageFile) || !File.Exists(ymlFile))
 {
-    Console.WriteLine($"One of these files was not found:\n{yamlFile}\n{csFile}\n{packageFile}");
+    Console.WriteLine($"One of these files was not found:\n{yamlFile}\n{csFile}\n{packageFile}\n{ymlFile}");
     return 0xDEAD;
 }
 
 var reYaml    = new Regex(@"PackageVersion: \d{1,2}\.\d{1,2}\.\d{1,2}");
+var reYml    = new Regex(@"PackageVersion: \d{1,2}\.\d{1,2}\.\d{1,2}");
 var reCs      = new Regex(@"_defaultElectronVersion = ""\d{1,2}\.\d{1,2}\.\d{1,2}""");
 var rePackage = new Regex(@"""electron"": ""\d{1,2}\.\d{1,2}\.\d{1,2}""");
 
 
 var yaml    = File.ReadAllText(yamlFile);
+var yml    = File.ReadAllText(ymlFile);
 var cs      = File.ReadAllText(csFile);
 var package = File.ReadAllText(packageFile);
 
-if (reYaml.IsMatch(yaml) && reCs.IsMatch(cs) && rePackage.IsMatch(package))
+if (reYaml.IsMatch(yaml) && reCs.IsMatch(cs) && rePackage.IsMatch(package) && reYml.IsMatch(yml))
 {
-    yaml    = reYaml.Replace(yaml, $"PackageVersion: {version}");
-    cs      = reCs.Replace(cs, $"_defaultElectronVersion = \"{version}\"");
+    yaml = reYaml.Replace(yaml, $"PackageVersion: {version}");
+    yml = reYml.Replace(yml, $"PackageVersion: {version}");
+    cs = reCs.Replace(cs, $"_defaultElectronVersion = \"{version}\"");
     package = rePackage.Replace(package, $"\"electron\": \"{version}\"");
 
     File.WriteAllText(yamlFile, yaml);
     File.WriteAllText(csFile, cs);
     File.WriteAllText(packageFile, package);
+    File.WriteAllText(ymlFile, yml);
 
     Directory.SetCurrentDirectory(packagePath);
 
     var psi = new ProcessStartInfo();
-    psi.FileName  = "cmd";
+    psi.FileName = "cmd";
     psi.Arguments = "/c \"npm update -D\"";
 
     var npmProcess = Process.Start(psi);
