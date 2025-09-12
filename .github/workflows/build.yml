@@ -67,6 +67,7 @@ jobs:
         run: |
           cd ./ElectronSharp.Host
           npm install --no-audit
+          npm install -g typescript
           
       - name: tsc build
         run: |
