@@ -306,56 +306,8 @@ namespace ElectronSharp.API
 
         public static async Task<T> OnResult<T>(string triggerEvent, string completedEvent, params object[] args)
         {
-            string eventKey = completedEvent;
-
-            if (args is object && args.Length > 0) // If there are arguments passed, we generate a unique event key with the arguments
-                // this allow us to wait for previous events first before registering new ones
-            {
-                var hash = new HashCode();
-
-                foreach (var obj in args)
-                {
-                    hash.Add(obj);
-                }
-                eventKey = $"{eventKey}-{(uint)hash.ToHashCode()}";
-            }
-
-            if (EventTasks<T>.TryGetOrAdd(completedEvent, eventKey, out var taskCompletionSource, out var waitThisFirstAndThenTryAgain))
-            {
-                if (waitThisFirstAndThenTryAgain is object)
-                {
-                    //There was a pending call with different parameters, so we need to wait that first and then call here again
-                    try
-                    {
-                        await waitThisFirstAndThenTryAgain;
-                    }
-                    catch
-                    {
-                        //Ignore any exceptions here so we can set a new event below
-                        //The exception will also be visible to the original first caller due to taskCompletionSource.Task
-                    }
-
-                    //Try again to set the event
-                    return await OnResult<T>(triggerEvent, completedEvent, args);
-                }
-                else
-                {
-                    //A new TaskCompletionSource was added, so we need to register the completed event here
-
-                    On<T>(completedEvent, (result) =>
-                    {
-                        Off(completedEvent);
-                        taskCompletionSource.SetResult(result);
-                        EventTasks<T>.DoneWith(completedEvent, eventKey, taskCompletionSource);
-                    });
-
-                    await EmitAsync(triggerEvent, args);
-                }
-            }
-
-            return await taskCompletionSource.Task;
+            return await OnResult<T>(triggerEvent, completedEvent, CancellationToken.None, args);
         }
-
 
         public static async Task<T> OnResult<T>(string triggerEvent, string completedEvent, CancellationToken cancellationToken, params object[] args)
         {

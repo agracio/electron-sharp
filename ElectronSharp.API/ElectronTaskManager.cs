@@ -114,6 +114,5 @@ internal static class ElectronTaskManager
 
         return new TaskReturnArguments<string>(guid, taskCompletionSource);
     }
-    
 
 }
