@@ -7,7 +7,7 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: 1 
   DOTNET_NOLOGO: 1 
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  PackageVersion: 36.2.0.${{ github.run_id }}
+  PackageVersion: 37.6.1.${{ github.run_id }}
   projectAPI:  './ElectronSharp.API/ElectronSharp.API.csproj'
   projectCLI:  './ElectronSharp.CLI/ElectronSharp.CLI.csproj'
 
